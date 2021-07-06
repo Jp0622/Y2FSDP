@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+{% block PageContent %}
+<div class="row">
+	<div class="col-md-6 mx-auto">
+		<div class=" card-body">
+			<!-- <img class="logo" src="/public/img/logo.png"> -->
+			
+			<h1 class="text-center mb-5">Sign in to continue</h1>
+			<form action="/user/register" method="post">
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input type="email" name="email" class="form-control" value="{{email}}" required>
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" name="password" class="form-control" value="{{password}}" required>
+				</div>
+				<button type="submit" class="btn btn-primary w-100">Submit</button>
+				<p class="text-right"><a href="">Forgot Password?</a></p>
+				<p><a href="">Create an account</a></p>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock PageContent %}

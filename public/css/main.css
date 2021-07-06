@@ -1,0 +1,47 @@
+.logo {
+	width : 130px;
+	margin: auto;
+}
+body{
+	background-color: black;
+	color:yellow;
+}
+.navRow{
+	color: rgb(221, 221, 91);
+}
+.nav-item a{
+	color: rgb(221, 221, 91) !important;
+}
+.nav-item.active a{
+	color: white !important;
+}
+.navP{
+	line-height: 5px;
+}
+.navP2{
+	line-height: unset;
+}
+.contactDetails{
+	font-size: 0.8em;
+}
+.socialCircle{
+	height: 24px;
+	width: 24px;
+	border-radius: 200px;
+	padding: 6px;
+	display: inline-flex;
+	color: white;
+}
+.facebook{
+	background-color: #4267B2;
+}
+.twitter{
+	background-color: #1DA1F2;
+}
+.insta{
+	background-color: #C13584 ;
+}
+.socialLinks{
+	color: white !important;
+	margin-top: -3px;
+}
