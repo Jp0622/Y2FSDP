@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>User Management</title>
+
+    <link href="./views/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./views/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-table/dist/bootstrap-table.css">
+    <link rel="stylesheet" href="./views/assets/css/manage.css">
+    <style>
+        body {
+            min-height: 2000px;
+            padding-top: 70px;
+            background-color: #F3F3F3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Admin</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Account Management</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Inventory</a></li>
+                    <li><a href="#">Rewards</a></li>
+                    <li><a href="/upload">Upload Film<span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="big">
+                User Account Management
+            </div>
+        </div>
+    </div>
+    <div class="total">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 totalbox">
+                    <div class="glyphicon glyphicon-user logo" aria-hidden="true">
+                    </div>
+                    <div class="total_md">Total users</div>
+                    <div class="total_bt">
+                        There are currently 1 users.
+                    </div>
+                </div>
+                <div class="col-sm-4 totalbox">
+                    <div class="glyphicon glyphicon-log-in logo" aria-hidden="true">
+                    </div>
+                    <div class="total_md">Active</div>
+                    <div class="total_bt">
+                        There are currently 1 users.
+                    </div>
+                </div>
+                <div class="col-sm-4 totalbox">
+                    <div class="glyphicon glyphicon-log-out logo" aria-hidden="true">
+                    </div>
+                    <div class="total_md">Inactive</div>
+                    <div class="total_bt">
+                        There are currently 0 users.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div id="toolbar" class="btn-group">
+                    <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#myModal">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add new user
+                    </button>
+                </div>
+                <div>
+                    <table id="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Edit User Password</h4>
+                </div>
+                <div class="form-box">
+                    <form action="">
+                        <div class="form-item">
+                            <label for="item-label">Account</label>
+                            <input type="text" class="item-input" id="account" placeholder="Account" disabled>
+                        </div>
+                        <div class="form-item">
+                            <label for="item-label">password</label>
+                            <input type="password" class="item-input" id="password" placeholder="Password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id='submitChange'>Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./views/assets/js/jquery.js"></script>
+    <script src="./views/assets/js/bootstrap.min.js"></script>
+    <script src="../node_modules/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="../node_modules/bootstrap-table/dist/extensions/export/bootstrap-table-export.js"></script>
+    <script src="./views/assets/js/tableExport.min.js"></script>
+    <script src="./views/assets/js/alert.js"></script>
+
+    <script>
+        $(function () {
+            $('#table').bootstrapTable({
+                url: 'http://localhost:3000/api/user/getUser',
+                method: 'get',
+                striped: true,
+                toolbar: '#toolbar', 
+                pagination: true,
+                pageNumber: 1,
+                pageSize: 5,
+                pageList: [1, 3, 5, 10],
+                search: true,
+                clickToSelect: true,
+                showColumns: true,
+                showRefresh: true,
+                showExport: true,
+                exportDataType: "all",
+                columns: [{
+                    field: 'user_account',
+                    title: 'Account'
+                }, {
+                    field: 'user_password',
+                    title: 'Password'
+                }, {
+                    field: 'user_email',
+                    title: 'Email'
+                },
+                {
+                    field: 'operator',
+                    title: 'Action',
+                    align: 'center',
+                    valign: 'middle',
+                    width: '10%',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" title="delete">' +
+                            '<i class="glyphicon glyphicon-trash text-danger"></i> ' +
+                            '</a><a href="javascript:void(0)" title="edit">' +
+                            '<i class="glyphicon glyphicon-edit text-edit"></i>' +
+                            '</a>'
+                    },
+                    events: {
+                        'click a[title=delete]': function (e, value, row, index) {
+                            if (confirm('This operation is irreversible. Are you sure you want to delete it?')) {
+                                $.ajax({
+                                    url: 'http://localhost:3000/api/user/deleteUser/' + row.id,
+                                    type: 'post',
+                                    success: function (data, res) {
+                                        if (data.code !== 200) {
+                                            commonUtil.message('Delete failed', 'warning')
+                                            return
+                                        }
+                                        commonUtil.message('Delete succeeded')
+                                        $("#table").bootstrapTable("refresh", {
+                                            silent: true
+                                        });
+                                    },
+                                    error: function (data, err) {
+                                        console.log(err)
+                                    }
+                                });
+                            }
+                        },
+                        'click a[title=edit]': function (e, value, row, index) {
+                            $.ajax({
+                                url: 'http://localhost:3000/api/user/getUserById/' + row.id,
+                                type: 'get',
+                                success: function (data, res) {
+                                    if (data.code !== 200) {
+                                        commonUtil.message('Get User failed', 'warning')
+                                        return
+                                    }
+                                    console.log(data)
+                                    $("#account").val(data.data.user_account)
+                                },
+                                error: function (data, err) {
+                                    console.log(err)
+                                }
+                            });
+
+                            $('#editUser').modal('show')
+
+                            $("#submitChange").click(function () {
+                                var user_password = $('#password').val()
+                                var data = { user_password: user_password }
+                                $.ajax({
+                                    url: 'http://localhost:3000/api/user/editUser/' + row.id,
+                                    type: 'post',
+                                    data: data,
+                                    success: function (data, res) {
+                                        if (data.code !== 200) {
+                                            commonUtil.message('change password failed', 'warning')
+                                            return
+                                        }
+                                        commonUtil.message('change password success')
+                                        $('#editUser').modal('hide')
+                                        $("#table").bootstrapTable("refresh", {
+                                            silent: true
+                                        });
+                                    },
+                                    error: function (data, err) {
+                                        console.log(err)
+                                    }
+                                });
+                            })
+                        }
+                    }
+                }
+                ]
+            })
+        });
+
+
+
+        // 添加入库操作
+        function add_info() {
+            var form_data = $("#form_data").serialize();
+            alert(form_data);
+        }
+
+    </script>
+</body>
+
+</html>

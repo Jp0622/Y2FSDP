@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link
+		href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&amp;subset=devanagari,latin-ext"
+		rel="stylesheet">
+
+	<title>Sign up</title>
+
+	<link rel="shortcut icon" type="image/icon" href="./views/assets/logo/favicon.png" />
+
+	<link rel="stylesheet" href="./views/assets/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="./views/assets/css/animate.css">
+
+	<link rel="stylesheet" href="./views/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./views/assets/css/bootsnav.css">
+
+	<link rel="stylesheet" href="./views/assets/css/style.css">
+
+	<link rel="stylesheet" href="./views/assets/css/responsive.css">
+
+</head>
+
+<body>
+	<section class="signin signup popup-up">
+		<div class="container">
+			<div class="sign-content popup-in-content">
+				<div class="popup-in-txt">
+					<h2>sign up</h2>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-form">
+								<form action="signin.html" id='registerForm'>
+									<div class="form-group">
+										<label for="signin_form">Account</label>
+										<input type="text" class="form-control" id="account" placeholder="Account">
+									</div>
+									<div class="form-group">
+										<label for="signin_form">password</label>
+										<input type="password" class="form-control" id="password"
+											placeholder="Password">
+									</div>
+									<div class="form-group">
+										<label for="signin_form">repeat password</label>
+										<input type="password" class="form-control" id="re_password"
+											placeholder="Repeat Password">
+									</div>
+									<div class="form-group">
+										<label for="signin_form">Email</label>
+										<input type="email" class="form-control" id="email"
+											placeholder="enter your email here">
+									</div>
+									<div class="form-col">
+										<div class="form-group">
+											<label for="signin_form">verification Code
+											</label>
+											<input type="text" class="form-control" id="code"
+												placeholder="Verification Code">
+										</div>
+									</div>
+									<div class="form-col1">
+										<div class="form-group">
+											<label for="signin_form">send email</label>
+											<button type="button" class="btn send_btn" id="send">
+												Send Email
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-footer">
+								<button type="button" class="btn signin_btn" id="register">
+									sign up
+								</button>
+								<p>
+									already member ?
+									<a href="/">sign in</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+	<footer class="footer-copyright">
+		<div id="scroll-Top">
+			<i class="fa fa-angle-double-up return-to-top" id="scroll-top" data-toggle="tooltip" data-placement="top"
+				title="" data-original-title="Back to Top" aria-hidden="true"></i>
+
+
+	</footer>
+	<script src="./views/assets/js/jquery.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+	<script src="./views/assets/js/bootstrap.min.js"></script>
+	<script src="./views/assets/js/bootsnav.js"></script>
+
+	<script src="./views/assets/js/jquery.sticky.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+
+	<script src="./views/assets/js/custom.js"></script>
+
+	<script src="./views/assets//js/alert.js"></script>
+
+	<script>
+		$(function () {
+
+			var emailCode
+			//
+			$("#send").click(function () {
+				var email = $("#email").val();
+				if (email !== '') {
+					var random = createSixNum();
+					emailCode = random
+					console.log(emailCode);
+					var data = { 'email': email, 'randomNum': random }
+					$.ajax({
+						url: 'http://localhost:3000/api/user/email',
+						type: 'get',
+						data: data,
+						success: function (data, res) {
+							console.log(data)
+						},
+						error: function (data, err) {
+							console.log(err)
+						}
+					});
+				}
+			});
+
+			// register
+			$("#register").click(function () {
+				var account = $("#account").val();
+				var password = $("#password").val();
+				var re_password = $("#re_password").val();
+				var email = $("#email").val();
+				var code = $("#code").val();
+
+				if (account === '' || password === '' || re_password === '' || email === '' || code === '') {
+					commonUtil.message('Please complete the information', 'warning')
+					return
+				} else if (password !== re_password) {
+					$("#password").css("border", "1px solid red");
+					$("#re_password").css("border", "1px solid red");
+					commonUtil.message('The two passwords are inconsistent', 'warning')
+					return
+				} else if (code !== emailCode) {
+					commonUtil.message('Verification code error', 'warning')
+					return
+				} else {
+					var data = { "user_account": account, "user_password": password, "user_email": email };
+					$.ajax({
+						url: 'http://localhost:3000/api/user/register',
+						type: 'post',
+						data: data,
+						success: function (data, res) {
+							if (data.code !== 200) {
+								commonUtil.message('register failed', 'warning')
+							}
+							commonUtil.message('register successful,load to the login interface after 3 seconds')
+							setTimeout(() => {
+								location.href = '/'
+							}, 3000);
+						},
+						error: function (data, err) {
+							console.log(err)
+						}
+					});
+				}
+			});
+		});
+
+		// 生成随机数
+		function createSixNum() {
+			var Num = ''
+			for (var i = 0; i < 6; i++) {
+				Num += Math.floor(Math.random() * 10)
+			}
+			return Num
+		}
+	</script>
+</body>
+
+</html>
