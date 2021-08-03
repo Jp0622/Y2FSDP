@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link
+		href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&amp;subset=devanagari,latin-ext"
+		rel="stylesheet">
+
+	<title>Sign in</title>
+
+	<link rel="shortcut icon" type="image/icon" href="./views/assets/logo/favicon.png" />
+
+	<link rel="stylesheet" href="./views/assets/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="./views/assets/css/animate.css">
+
+	<link rel="stylesheet" href="./views/assets/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="./views/assets/css/bootsnav.css">
+
+	<link rel="stylesheet" href="./views/assets/css/style.css">
+
+	<link rel="stylesheet" href="./views/assets/css/responsive.css">
+</head>
+
+<body>
+	<section class="signin popup-in">
+		<div class="container">
+			<div class="sign-content popup-in-content">
+				<div class="popup-in-txt">
+					<h2>sign in</h2>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-form">
+								<form action="signin.html">
+									<div class="form-group">
+										<label for="signin_form">account</label>
+										<input type="email" class="form-control" id="account" placeholder="Account">
+									</div>
+									<div class="form-group">
+										<label for="signin_form">password</label>
+										<input type="password" class="form-control" id="password"
+											placeholder="Password">
+									</div>
+									<div class="form-group" style="display: flex;">
+										<input type="button" class="form-control" id="verify" value="Click verify">
+										<div class="bar-div dis"></div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-footer">
+								<button type="button" class="btn signin_btn" id='login'>
+									sign in
+								</button>
+								<p>
+									Don’t have an Account ?
+									<a href="/register">register</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+	<footer class="footer-copyright">
+		<div id="scroll-Top">
+			<i class="fa fa-angle-double-up return-to-top" id="scroll-top" data-toggle="tooltip" data-placement="top"
+				title="" data-original-title="Back to Top" aria-hidden="true"></i>
+		</div>
+
+	</footer>
+
+
+
+	<script src="./views/assets/js/jquery.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+	<script src="./views/assets/js/bootstrap.min.js"></script>
+
+	<script src="./views/assets/js/bootsnav.js"></script>
+
+	<script src="./views/assets/js/jquery.sticky.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+
+	<script src="./views/assets/js/custom.js"></script>
+
+	<script src="./views/assets/js/alert.js"></script>
+
+	<script>
+		$("#login").click(function () {
+			var account = $("#account").val();
+			var password = $("#password").val();
+
+			var data = { "user_account": account, "user_password": password };
+
+			if (account === '' || password === '') {
+				$("#account").css("border", "1px solid red");
+				$("#password").css("border", "1px solid red");
+				commonUtil.message('account and password are required', 'warning')
+				return
+			}
+
+			$.ajax({
+				url: 'http://localhost:3000/api/user/login',
+				type: 'post',
+				data: data,
+				success: function (data, res) {
+					if (data.code !== 200) {
+						commonUtil.message('The user does not exist', 'warning')
+						return
+					}
+					commonUtil.message('Login successful')
+					console.log(data)
+					localStorage.setItem('userId', data.data.id)
+					location.href = '/index'
+				},
+				error: function (data, err) {
+					console.log(err)
+				}
+			});
+		});
+
+		$("#verify").click(function () {
+			$(".bar-div").removeClass('dis')
+		})
+	</script>
+
+</body>
+
+</html>
